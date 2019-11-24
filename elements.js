@@ -4,31 +4,22 @@ const ICONS_GEOMETRY = new Map([
   ['chevron-right', 'M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z'],
 ])
 
+const SVG_NAMESPACE = 'http://www.w3.org/2000/svg'
 
-ICONS_GEOMETRY.forEach((geometry, name) => {
-  customElements.define(`${name}-icon`, class extends HTMLElement {
-    constructor(){
-      super()
-      const shadow = this.attachShadow({
-         mode: 'open'
-      })
-       
-      shadow.innerHTML = `<style>
-        :host {
-          font-size: 16px;
-          display: inline-block;
-          margin: 4px;
-          line-height: 1em;
-          height: 1em;
-          width: 1em;
-        }
-        svg {
-          fill: currentColor;        
-        }
-      </style>
-      <svg role="presentation" viewbox="0 0 24 24">
-        <path d="${geometry}" />
-      </svg>`
-    }
-  })
+customElements.define('svg-icon', class SvgIconElement extends HTMLElement{
+  constructor(){
+    super()
+
+    const path = document.createElementNS(SVG_NAMESPACE, 'path')
+    const icon = this.getAttribute('icon')
+    const geometry = ICONS_GEOMETRY.get(icon)
+    path.setAttribute('d', geometry)
+
+    const svg = document.createElementNS(SVG_NAMESPACE, 'svg')
+    svg.setAttribute('role', 'presentation')
+    svg.setAttribute('viewBox', '0 0 24 24')
+    svg.appendChild(path)
+    this.appendChild(svg)
+
+  }
 })

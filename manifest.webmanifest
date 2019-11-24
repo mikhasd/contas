@@ -1,0 +1,10 @@
+{
+  "name": "Contas",
+  "short_name": "Contas",
+  "start_url": ".",
+  "display": "standalone",
+  "background_color": "#323234",
+  "description": "Applicativo para gerenciar as contas",
+  "lang": "pt-BR",
+  "orientation": "portrait"
+}

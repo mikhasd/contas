@@ -2,27 +2,20 @@ header nav h6 {
   flex-grow: 1;
 }
 
-main summary {
+.balance h1 {
+  color: #99CC00;
+}
+
+section.cashflow {
   display: flex;
-  justify-content: space-around;
-  align-items: stretch;
 }
 
-main summary span {
-  padding: 1em;
-  margin: 1px;
+h4.income {
   flex: 1;
-  border: 1px solid black;
-  text-align: center;
-  font-size: 1.5em;
+  color: #99CC00;
 }
 
-main summary span:nth-child(1) {          
-  border-color: #99cc00;
-  color: #99cc00;
-}
-
-main summary span:nth-child(2) {
-  border-color: red;
+h4.outcome {
+  flex: 1;
   color: red;
 }
