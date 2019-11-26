@@ -1,21 +1,68 @@
-header nav h6 {
+header nav h2 {
   flex-grow: 1;
 }
 
-.balance h1 {
+.balance h3 {
   color: #99CC00;
+  text-align: center;
+}
+
+.balance legend {
+  line-height: 1em;
+  text-align: center;
+  color: rgb(117, 117, 119);
 }
 
 section.cashflow {
   display: flex;
+  text-align: center;
 }
 
-h4.income {
+.income {
   flex: 1;
+  color: rgb(117, 117, 119);
+  text-align: center;
+  line-height: 1em;
+}
+
+.outcome {
+  flex: 1;
+  color: rgb(117, 117, 119);
+  line-height: 1em;
+  text-align: center;
+}
+
+.income h4 {
   color: #99CC00;
+  line-height: 1em;
 }
 
-h4.outcome {
-  flex: 1;
+.outcome h4 {
   color: red;
+  line-height: 1em;
+}
+
+
+details summary {
+  display: flex;
+}
+
+details > summary {
+  list-style: none;
+}
+
+details > summary::-webkit-details-marker {
+  display: none;
+}
+
+details summary span:first-child {
+  flex: 1;
+}
+
+details summary span:last-child {
+  color: red;
+}
+
+main {
+  padding-top: 6em;
 }
