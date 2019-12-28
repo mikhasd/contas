@@ -1,5 +1,20 @@
 <script>
-  import Button from "./components/Button.svelte";
+  import Button from "./components/Button.svelte"
+  import { monthName } from './utils.js'
+  import * as session from "./services/Session.js"
+
+  const CURERNT_YEAR = new Date().getFullYear()
+  
+  let period = session.getCurrentPeriod()
+
+  function nextMonth(){
+    period = session.nextPeriod()
+  }
+
+  function previousMonth(){    
+    period = session.previousPeriod()
+  }
+
 </script>
 
 <style>
@@ -37,8 +52,8 @@
   </nav>
 
   <nav>
-    <Button icon="chevron-left" />
-    <h2>Dezembro</h2>
-    <Button icon="chevron-right" />
+    <Button icon="chevron-left" on:click={previousMonth}/>
+    <h2>{monthName(period.month)}{CURERNT_YEAR !== period.year ? ` / ${period.year}` : ''}</h2>
+    <Button icon="chevron-right" on:click={nextMonth}/>
   </nav>
 </header>

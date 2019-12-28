@@ -1,6 +1,6 @@
 <script>
   import SvgIcon from "./SvgIcon.svelte";
-  export let icon
+  export let icon = null
   export let iconPosition = 'left'
 </script>
 <style>
@@ -47,7 +47,7 @@
     border-radius: 2em;
   }
 </style>
-<button class:icon={icon}>
+<button class:icon={icon} on:click>
   {#if icon && iconPosition === 'left'}
     <SvgIcon {icon}/>
   {/if}

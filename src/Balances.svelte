@@ -1,5 +1,18 @@
 <script>
-  const formatter = new Intl.NumberFormat('pt-BR', {style:'currency', currency: 'BRL'})
+  import * as session from './services/Session.js'
+  import * as accountService from './services/Account.js'
+  import * as balanceService from './services/Balance.js'
+  const account = accountService.getAccount()
+  const formatter = new Intl.NumberFormat('pt-BR', {style:'currency', currency: account.currency})
+
+  const period = session.getCurrentPeriod()
+
+  let balance = balanceService.getBalance(period)
+
+  session.onPeriodChange(newPeriod => {    
+    balance = balanceService.getBalance(newPeriod)
+  })
+
 </script>
 <style>
   legend {
@@ -49,17 +62,17 @@
 
 <section class="balance">
   <legend>Saldo</legend>
-  <h3>{formatter.format(30000)}</h3>
+  <h3>{formatter.format(balance.balance)}</h3>
 </section>
 <hr />
 <section class="cashflow">
   <span class="income">
     <legend>Entradas</legend>
-    <h4>{formatter.format(45000)}</h4>
+    <h4>{formatter.format(balance.credits)}</h4>
   </span>
   <span class="outcome">
     <legend>Saidas</legend>
-    <h4>{formatter.format(55000)}</h4>
+    <h4>{formatter.format(balance.debits)}</h4>
   </span>
 </section>
 <hr />

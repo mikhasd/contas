@@ -1,28 +1,14 @@
 <script>
-  let entries = [
-    {
-      description: "Coto",
-      value: 3000.00
-    },
-    {
-      description: "Pedidos Ya",
-      value: 500
-    },
-    {
-      description: "Veterinario Maly",
-      value: 2000
-    },
-    {
-      description: "Voo São Paulo",
-      value: 39000
-    },
-    {
-      description: "Pizza Aeroporto",
-      value: 500
-    }
-  ];
+  import * as entriesService from './services/Entries.js'
+  import * as session from './services/Session.js'
 
-  const formatter = new Intl.NumberFormat('pt-BR', {style:'currency', currency: 'BRL'})
+  let entries = entriesService.getEntries(session.getCurrentPeriod())
+
+  session.onPeriodChange(period => {
+    entries = entriesService.getEntries(period)
+  })
+
+  const formatter = new Intl.NumberFormat('default', {style:'currency', currency: 'BRL'})
 
 </script>
 
@@ -79,9 +65,10 @@
     <li>
       <details>
         <summary>
-          <span>{entry.description}</span>
-          <span>{formatter.format(entry.value)}</span>
+          <span>{entry.title}</span>
+          <span>{formatter.format(entry.amount)}</span>
         </summary>
+        {entry.description}
       </details>
     </li>
   {/each}
