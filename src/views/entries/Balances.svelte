@@ -1,7 +1,7 @@
 <script>
-  import * as session from './services/Session.js'
-  import * as accountService from './services/Account.js'
-  import * as balanceService from './services/Balance.js'
+  import * as session from '../../services/Session.js'
+  import * as accountService from '../../services/Account.js'
+  import * as balanceService from '../../services/Balance.js'
   const account = accountService.getAccount()
   const formatter = new Intl.NumberFormat('pt-BR', {style:'currency', currency: account.currency})
 

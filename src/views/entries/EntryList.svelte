@@ -1,15 +1,19 @@
 <script>
-  import * as entriesService from './services/Entries.js'
-  import * as session from './services/Session.js'
+  import { query } from "../../backend";
+  import * as session from "../../services/Session.js";
 
-  let entries = entriesService.getEntries(session.getCurrentPeriod())
+  let pendingEntries = query('entriesByPeriod',session.getCurrentPeriod());
+
+  let entries = [];
 
   session.onPeriodChange(period => {
-    entries = entriesService.getEntries(period)
-  })
+    pendingEntries = query('entriesByPeriod',period);
+  });
 
-  const formatter = new Intl.NumberFormat('default', {style:'currency', currency: 'BRL'})
-
+  const formatter = new Intl.NumberFormat("default", {
+    style: "currency",
+    currency: "BRL"
+  });
 </script>
 
 <style>
@@ -61,15 +65,17 @@
 </style>
 
 <ul>
-  {#each entries as entry}
-    <li>
-      <details>
-        <summary>
-          <span>{entry.title}</span>
-          <span>{formatter.format(entry.amount)}</span>
-        </summary>
-        {entry.description}
-      </details>
-    </li>
-  {/each}
+  {#await pendingEntries then entries}
+    {#each entries as entry}
+      <li>
+        <details>
+          <summary>
+            <span>{entry.venue}</span>
+            <span>{formatter.format(entry.amount)}</span>
+          </summary>
+          {entry.description}
+        </details>
+      </li>
+    {/each}
+  {/await}
 </ul>

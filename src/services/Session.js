@@ -1,7 +1,4 @@
-/**
- * Represents a month of an year.
- * @typedef {{month:number, year:number}} Period
- */
+import Period from '../model/Period.js'
 
 /**
  * Reacts to a period change event.
@@ -10,19 +7,7 @@
  * The collection of registered `PeriodChangeEventListener`s
  * @type {PeriodChangeEventListener[]}
  */
-const LISTENERS = []
-
-/**
- * Determines the current period based on the current date.
- * 
- * @returns {Period}
- */
-function determineCurrentPeriod() {
-  const now = new Date()
-  const year = now.getFullYear()
-  const month = now.getMonth() + 1
-  return { month, year }
-}
+const PERIOD_CHANGE_LISTENER = []
 
 /**
  * The current period.
@@ -31,16 +16,16 @@ function determineCurrentPeriod() {
  * 
  * @type {Period}
  */
-let currentPeriod = determineCurrentPeriod()
+let currentPeriod = Period.current()
 
 /**
  * Saves the given period and notify listeners.
  * 
  * @param {Period} period 
  */
-function setCurrentPeriod(period) {
+export function setCurrentPeriod(period) {
   currentPeriod = period
-  for (let listener of LISTENERS) {
+  for (let listener of PERIOD_CHANGE_LISTENER) {
     listener(period)
   }
 }
@@ -55,56 +40,55 @@ export function getCurrentPeriod() {
 }
 
 /**
- * Change the session's period for the next one.
- * 
- * @returns {Period} The next period
- */
-export function nextPeriod() {
-  const current = currentPeriod
-  let next
-  if (current.month === 12) {
-    next = {
-      month: 1,
-      year: current.year + 1
-    }
-  } else {
-    next = {
-      month: current.month + 1,
-      year: current.year
-    }
-  }
-  setCurrentPeriod(next)
-  return next
-}
-
-/**
- * Change the session's period for the previous one.
- * 
- * @returns {Period} The previous period
- */
-export function previousPeriod() {
-  const current = currentPeriod
-  let previous
-  if (current.month === 1) {
-    previous = {
-      month: 12,
-      year: current.year - 1
-    }
-  } else {
-    previous = {
-      month: current.month - 1,
-      year: current.year
-    }
-  }
-  setCurrentPeriod(previous)
-  return previous
-}
-
-/**
  * Adds a listener for period change events.
  * 
  * @param {PeriodChangeEventListener} listener
  */
 export function onPeriodChange(listener) {
-  LISTENERS.push(listener)
+  PERIOD_CHANGE_LISTENER.push(listener)
+}
+
+/**
+ * Reacts to view change events.
+ * @typedef {(view: string)=>void} ViewChangeListener
+ * 
+ * The collection of registered `ViewChangeListener`s
+ * @type {ViewChangeListener[]}
+ */
+const VIEW_CHANGE_LISTENER = []
+
+export const ENTRIES_VIEW = 'ENTRIES'
+export const FORM_VIEW = 'FORM'
+
+let currentEntry = ENTRIES_VIEW
+
+/**
+ * Get the current view.
+ * 
+ * @returns {string}
+ */
+export function getCurrentView(){
+  return currentEntry
+}
+
+/**
+ * Register listener to view change events.
+ * @param {ViewChangeListener} listener 
+ */
+export function onViewChange(listener){
+  VIEW_CHANGE_LISTENER.push(listener)
+}
+
+export function openFormView(){  
+  currentEntry = FORM_VIEW
+  for(let listener of VIEW_CHANGE_LISTENER){
+    listener(FORM_VIEW)
+  }
+}
+
+export function openEntriesView(){  
+  currentEntry = ENTRIES_VIEW
+  for(let listener of VIEW_CHANGE_LISTENER){
+    listener(ENTRIES_VIEW)
+  }
 }

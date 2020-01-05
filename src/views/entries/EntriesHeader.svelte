@@ -1,20 +1,25 @@
 <script>
-  import Button from "./components/Button.svelte"
-  import { monthName } from './utils.js'
-  import * as session from "./services/Session.js"
+  import Button from "../../components/Button.svelte"
+  import { monthName } from '../../utils.js'
+  import * as session from "../../services/Session.js"
 
   const CURERNT_YEAR = new Date().getFullYear()
   
   let period = session.getCurrentPeriod()
 
   function nextMonth(){
-    period = session.nextPeriod()
+    period = period.next()
+    session.setCurrentPeriod(period)
   }
 
   function previousMonth(){    
-    period = session.previousPeriod()
+    period = period.previous()
+    session.setCurrentPeriod(period)
   }
 
+  function openFormView(){
+    session.openFormView()
+  }
 </script>
 
 <style>
@@ -35,8 +40,8 @@
     display: flex;
     position: relative;
     align-items: center;
-    padding-left: 1.5em;
-    padding-right: 1.5em;
+    padding-left: 1em;
+    padding-right: 1em;
     min-height: 3em;
   }
   h2 {
@@ -48,7 +53,7 @@
   <nav>
     <Button icon="menu"/>
     <h2>Lançamentos</h2>
-    <Button>NOVO</Button>
+    <Button on:click={openFormView}>NOVO</Button>
   </nav>
 
   <nav>

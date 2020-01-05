@@ -2,6 +2,7 @@
   import SvgIcon from "./SvgIcon.svelte";
   export let icon = null
   export let iconPosition = 'left'
+  export let type = 'button'
 </script>
 <style>
   button {
@@ -18,7 +19,7 @@
     justify-content: center;
     display: inline-flex;
 
-    color: rgb(249, 249, 250);
+    color: white;
 
     background-color: rgb(50, 50, 52);
     border: 2px solid transparent;
@@ -33,12 +34,12 @@
   button:active {
     background-color: rgb(84, 84, 88);
     border-color: rgb(73, 73, 76);
-    box-shadow: 0 0 1px rgb(32, 69, 109);
+    box-shadow: 0px 0px 4px rgb(32, 69, 109);
   }
 
   button:focus {
     border-color: rgb(10, 132, 255);
-    box-shadow: 0 0 1px rgb(32, 69, 109);
+    box-shadow: 0px 0px 4px rgb(32, 69, 109);
   }
 
   .icon {
@@ -47,7 +48,7 @@
     border-radius: 2em;
   }
 </style>
-<button class:icon={icon} on:click>
+<button class:icon on:click {type}>
   {#if icon && iconPosition === 'left'}
     <SvgIcon {icon}/>
   {/if}
