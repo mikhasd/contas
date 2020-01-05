@@ -1,9 +1,10 @@
 <script>
-  import Button from "../../components/Button.svelte"  
-  import * as session from '../../services/Session.js'
+  import { Button } from "../../components/";
 
-  function openEntriesView(){
-    session.openEntriesView()
+  import * as session from "../../services/Session.js";
+
+  function openEntriesView() {
+    session.openEntriesView();
   }
 </script>
 
@@ -33,7 +34,7 @@
 
 <header>
   <nav>
-    <Button icon="chevron-left" on:click={openEntriesView}/>
+    <Button icon="chevron-left" on:click={openEntriesView} />
     <h2>Novo Lançamento</h2>
   </nav>
 </header>

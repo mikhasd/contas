@@ -1,7 +1,5 @@
 <script>
-  import FormInput from "../../components/FormInput.svelte";
-  import SvgIcon from "../../components/SvgIcon.svelte";
-  import Button from "../../components/Button.svelte";
+  import {FormInput, SvgIcon, Button} from "../../components/";
   import * as utils from "../../utils.js";
   import { dispatchCommand, query } from "../../backend";
   import * as session from "../../services/Session.js";

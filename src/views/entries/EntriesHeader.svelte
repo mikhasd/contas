@@ -1,24 +1,24 @@
 <script>
-  import Button from "../../components/Button.svelte"
-  import { monthName } from '../../utils.js'
-  import * as session from "../../services/Session.js"
+  import { Button } from "../../components/";
+  import { monthName } from "../../utils.js";
+  import * as session from "../../services/Session.js";
 
-  const CURERNT_YEAR = new Date().getFullYear()
-  
-  let period = session.getCurrentPeriod()
+  const CURERNT_YEAR = new Date().getFullYear();
 
-  function nextMonth(){
-    period = period.next()
-    session.setCurrentPeriod(period)
+  let period = session.getCurrentPeriod();
+
+  function nextMonth() {
+    period = period.next();
+    session.setCurrentPeriod(period);
   }
 
-  function previousMonth(){    
-    period = period.previous()
-    session.setCurrentPeriod(period)
+  function previousMonth() {
+    period = period.previous();
+    session.setCurrentPeriod(period);
   }
 
-  function openFormView(){
-    session.openFormView()
+  function openFormView() {
+    session.openFormView();
   }
 </script>
 
@@ -51,14 +51,16 @@
 
 <header>
   <nav>
-    <Button icon="menu"/>
+    <Button icon="menu" />
     <h2>Lançamentos</h2>
     <Button on:click={openFormView}>NOVO</Button>
   </nav>
 
   <nav>
-    <Button icon="chevron-left" on:click={previousMonth}/>
-    <h2>{monthName(period.month)}{CURERNT_YEAR !== period.year ? ` / ${period.year}` : ''}</h2>
-    <Button icon="chevron-right" on:click={nextMonth}/>
+    <Button icon="chevron-left" on:click={previousMonth} />
+    <h2>
+      {monthName(period.month)}{CURERNT_YEAR !== period.year ? ` / ${period.year}` : ''}
+    </h2>
+    <Button icon="chevron-right" on:click={nextMonth} />
   </nav>
 </header>
