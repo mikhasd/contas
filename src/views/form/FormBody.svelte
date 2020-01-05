@@ -1,8 +1,9 @@
 <script>
   import FormInput from "../../components/FormInput.svelte";
+  import SvgIcon from "../../components/SvgIcon.svelte";
   import Button from "../../components/Button.svelte";
   import * as utils from "../../utils.js";
-  import { dispatchCommand } from "../../backend/";  
+  import { dispatchCommand, query } from "../../backend";
   import * as session from "../../services/Session.js";
 
   const initialDate = utils.localDate();
@@ -13,22 +14,22 @@
 
     let date = data.get("date");
     const time = data.get("time");
-    date = new Date(`${date}T${time}`).getTime();
+    date = new Date(`${date}T${time}`);
     const venue = data.get("venue");
-    const amount = data.get("amount");
+    const amount = parseFloat(data.get("amount"));
     const description = data.get("description");
-    const timestamp = new Date().getTime()
 
     const entry = {
       date,
       venue,
       amount,
-      description,
-      timestamp
+      description
     };
-    await dispatchCommand('saveEntry', entry)
+    await dispatchCommand("saveEntry", entry);
     session.openEntriesView();
   }
+
+  let pendingVenues = query("venuesOrderByUsage");
 </script>
 
 <style>
@@ -37,7 +38,11 @@
   }
 
   span {
-    display: flex;
+    display: flex;    
+  }
+
+  :global(.icon) {
+    padding: 0.3em;
   }
 
   :global(.wide) {
@@ -45,10 +50,11 @@
   }
 </style>
 
-<form on:submit|preventDefault|once={saveEntry}>
+<form on:submit|preventDefault|once={saveEntry} autocomplete="off">
   <label>
     Data:
     <span>
+      <SvgIcon icon="calendar-check" class="icon"/>
       <FormInput
         name="date"
         class="wide"
@@ -63,23 +69,38 @@
         value={initialTime} />
     </span>
   </label>
+
   <label>
     Local:
     <span>
-      <FormInput name="venue" class="wide" type="text" required list="locais" />
+      <SvgIcon icon="current-location" class="icon"/>
+      <FormInput
+        name="venue"
+        class="wide"
+        type="text"
+        required
+        list="knownVenues"
+        autocomplete="off" />
+      {#await pendingVenues then venues}
+        <datalist id="knownVenues">
+          {#each venues as venue}
+            <option value={venue.name} />
+          {/each}
+        </datalist>
+      {/await}
     </span>
   </label>
 
   <label>
     Montante:
     <span>
+      <SvgIcon icon="dolar-symbol" class="icon"/>
       <FormInput
         name="amount"
         class="wide"
         type="number"
         min="0"
-        step="1.00"
-        pattern="\d+(?[\.,]\d+)"
+        step="0.01"
         required />
     </span>
   </label>
@@ -87,6 +108,7 @@
   <label>
     Descrição:
     <span>
+      <SvgIcon icon="description" class="icon"/>
       <FormInput name="description" class="wide" type="text" required />
     </span>
   </label>

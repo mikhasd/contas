@@ -14,6 +14,8 @@
     style: "currency",
     currency: "BRL"
   });
+
+  const dateFormatter = new Intl.DateTimeFormat('default', {day: 'numeric'})
 </script>
 
 <style>
@@ -25,41 +27,48 @@
     list-style: none;
   }
 
-  ul li {
+  li {
+    display: flex;
     padding: 10px;
     background-color: rgb(43, 43, 48);
   }
 
-  ul li:nth-child(even) {
+  li:nth-child(even) {
     background-color: rgb(32, 32, 35);
   }
 
-  ul li:hover {
+  li:hover {
     background-color: rgb(40, 58, 79);
   }
 
-  ul li:focus,
-  ul li:active {
+  li:focus,
+  li:active {
     background-color: rgb(10, 132, 255);
   }
 
-  details summary {
-    display: flex;
+  .entryDate {
+    padding: 0 1em 0 0.5em;
+    font-weight: 900;
   }
 
-  details > summary {
-    list-style: none;
-  }
-
-  details > summary::-webkit-details-marker {
-    display: none;
-  }
-
-  details summary span:first-child {
+  details {
     flex: 1;
   }
 
-  details summary span:last-child {
+  summary {
+    list-style: none;
+    display: flex;
+  }
+
+  summary::-webkit-details-marker {
+    display: none;
+  }
+
+  summary span:first-child {
+    flex: 1;
+  }
+
+  summary span:last-child {
     color: red;
   }
 </style>
@@ -68,6 +77,7 @@
   {#await pendingEntries then entries}
     {#each entries as entry}
       <li>
+        <span class="entryDate">{entry.date.getDate()}</span>
         <details>
           <summary>
             <span>{entry.venue}</span>

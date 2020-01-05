@@ -1,78 +1,76 @@
 <script>
-  import * as session from '../../services/Session.js'
-  import * as accountService from '../../services/Account.js'
-  import * as balanceService from '../../services/Balance.js'
-  const account = accountService.getAccount()
-  const formatter = new Intl.NumberFormat('pt-BR', {style:'currency', currency: account.currency})
+  import * as session from "../../services/Session.js";
+  import { query } from "../../backend";
 
-  const period = session.getCurrentPeriod()
+  const ZERO_BALANCE = {
+    total: 0,
+    credits: 0,
+    debits: 0
+  };
 
-  let balance = balanceService.getBalance(period)
+  const formatter = new Intl.NumberFormat("pt-BR", {
+    style: "currency",
+    currency: "BRL"
+  });
 
-  session.onPeriodChange(newPeriod => {    
-    balance = balanceService.getBalance(newPeriod)
-  })
+  let balance = ZERO_BALANCE;
 
+  async function updateBalance(period) {
+    balance = await query("balanceByPeriod", period);
+    if (!balance) balance = ZERO_BALANCE;
+  }
+
+  updateBalance(session.getCurrentPeriod());
+
+  session.onPeriodChange(updateBalance);
 </script>
+
 <style>
   legend {
     font-size: 0.8em;
-  }
-
-  .balance h3 {
-    color: #99cc00;
-    text-align: center;
-  }
-
-  .balance legend {
-    line-height: 1em;
     text-align: center;
     color: rgb(117, 117, 119);
   }
 
-  section.cashflow {
+  h3,
+  h4 {
+    text-align: center;
+    color: #99cc00;
+  }
+
+  .negative {
+    color: red;
+  }
+
+  .cashflow {
     display: flex;
     text-align: center;
   }
 
-  .income {
+  span {
     flex: 1;
-    color: rgb(117, 117, 119);
-    text-align: center;
-    line-height: 1em;
   }
 
-  .outcome {
-    flex: 1;
-    color: rgb(117, 117, 119);
-    line-height: 1em;
-    text-align: center;
-  }
-
-  .income h4 {
-    color: #99cc00;
-    line-height: 1em;
-  }
-
-  .outcome h4 {
-    color: red;
+  legend {
     line-height: 1em;
   }
 </style>
 
-<section class="balance">
+<section>
   <legend>Saldo</legend>
-  <h3>{formatter.format(balance.balance)}</h3>
+  <h3 class={balance.total < 0 ? 'negative' : ''}>
+    {formatter.format(balance.total)}
+  </h3>
 </section>
 <hr />
 <section class="cashflow">
-  <span class="income">
+  <span>
     <legend>Entradas</legend>
     <h4>{formatter.format(balance.credits)}</h4>
   </span>
-  <span class="outcome">
+  <span>
     <legend>Saidas</legend>
-    <h4>{formatter.format(balance.debits)}</h4>
+    <h4 class="negative">{formatter.format(balance.debits)}</h4>
   </span>
 </section>
 <hr />
