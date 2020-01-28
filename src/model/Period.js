@@ -65,4 +65,8 @@ export default class Period {
   toNumber(){
     return (this.year * 100) + this.month
   }
+
+  valueOf(){
+    return this.toNumber()
+  }
 }

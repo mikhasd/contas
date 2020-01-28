@@ -1,6 +1,6 @@
 <script>
   import * as session from "../../services/Session.js";
-  import { query } from "../../backend";
+  import { query, on } from "../../backend";
 
   const ZERO_BALANCE = {
     total: 0,
@@ -19,6 +19,11 @@
     balance = await query("balanceByPeriod", period);
     if (!balance) balance = ZERO_BALANCE;
   }
+
+  on('balanceUpdated', newBalance => {
+    if(balance.period == session.getCurrentPeriod())
+      balance = newBalance
+  })
 
   updateBalance(session.getCurrentPeriod());
 

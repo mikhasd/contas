@@ -1,4 +1,4 @@
-import { subscribe as subscribeEvent } from './event-bus'
+import { subscribe as subscribeEvent, dispatch as dispatchEvent } from './event-bus'
 import { subscribe as subscribeQuery } from './query-bus'
 import { database, BALANCES_TABLE } from './db'
 import Period from '../model/Period'
@@ -19,8 +19,9 @@ async function updateBalance(entry) {
       credits: 0
     }
     console.info('Inserting balance', balance)
-    database.table(BALANCES_TABLE).add(balance)
+    await database.table(BALANCES_TABLE).add(balance)    
   }
+  dispatchEvent('balanceUpdated', balance)
 }
 
 async function balanceByPeriod(period){
